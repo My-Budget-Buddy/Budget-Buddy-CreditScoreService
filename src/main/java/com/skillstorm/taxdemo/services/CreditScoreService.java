@@ -13,6 +13,7 @@ import com.skillstorm.taxdemo.repositories.CreditScoreHistoryRepository;
 import com.skillstorm.taxdemo.repositories.UserCreditDataRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -182,5 +183,43 @@ public class CreditScoreService {
         }
 
         return report.toString();
+    }
+
+    // Add the new method for credit improvement tips
+    public List<String> getCreditImprovementTips(Long userId) {
+        Optional<UserCreditData> optionalCreditData = repository.findByUserId(userId);
+        if (!optionalCreditData.isPresent()) {
+            throw new RuntimeException("User Credit Data not found for userId: " + userId);
+        }
+
+        UserCreditData creditData = optionalCreditData.get();
+        List<String> tips = new ArrayList<>();
+
+        // Example tips based on credit data
+        if (creditData.getCreditUtilization() > 30) {
+            tips.add("Keep your credit utilization below 30% to improve your score.");
+        }
+
+        if (creditData.getMissedPayments() > 0) {
+            tips.add("Make all your payments on time to avoid negative marks on your credit report.");
+        }
+
+        if (creditData.getTotalDebt() > 50000) {
+            tips.add("Consider paying down your debt to reduce your total debt and improve your score.");
+        }
+
+        if (creditData.getRecentInquiries() > 2) {
+            tips.add("Limit the number of new credit inquiries to improve your score.");
+        }
+
+        if (creditData.getNewAccounts() > 2) {
+            tips.add("Avoid opening too many new accounts in a short period to improve your score.");
+        }
+
+        if (tips.isEmpty()) {
+            tips.add("Your credit profile looks good! Keep up the good work.");
+        }
+
+        return tips;
     }
 }

@@ -80,4 +80,11 @@ public class CreditScoreController {
         String report = creditScoreService.generateCreditReport(userId);
         return ResponseEntity.ok(report);
     }
+
+    // New endpoint for credit improvement tips
+    @GetMapping("/tips/{userId}")
+    public ResponseEntity<List<String>> getCreditImprovementTips(@PathVariable Long userId) {
+        List<String> tips = creditScoreService.getCreditImprovementTips(userId);
+        return ResponseEntity.ok(tips);
+    }
 }
