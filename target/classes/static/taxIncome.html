@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taxable Income Calculator</title>
+    <link rel="stylesheet" href="taxIncome.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Taxable Income Calculator</h1>
+        <form id="taxForm">
+            <label for="income">Yearly Income Before Taxes:</label>
+            <input type="number" id="income" name="income" required>
+            <br>
+
+            <label for="dependents">Number of Dependents Under 18:</label>
+            <input type="number" id="dependents" name="dependents">
+            <br>
+
+            <label for="401k">Amount Contributed to 401k:</label>
+            <input type="number" id="401k" name="401k">
+            <br>
+
+            <label for="status">Filing Status:</label>
+            <select id="status" name="status" required>
+                <option value="single">Single</option>
+                <option value="married">Married</option>
+            </select>
+            <br>
+
+            <button type="button" onclick="calculateTaxableIncome()">Calculate Taxable Income</button>
+        </form>
+
+        <div id="result"></div>
+
+        <button type="button" id="returnButton" onclick="returnToIndex()" style="display: none;">Calculate Your Tax</button>
+    </div>
+
+    <script src="taxIncome.js"></script>
+</body>
+</html>
