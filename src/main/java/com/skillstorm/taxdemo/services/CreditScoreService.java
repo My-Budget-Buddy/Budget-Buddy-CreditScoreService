@@ -1,7 +1,10 @@
+// file: CreditScoreService.java
+
 package com.skillstorm.taxdemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.skillstorm.taxdemo.models.CreditAccount;
 import com.skillstorm.taxdemo.models.CreditScoreHistory;
@@ -12,9 +15,12 @@ import com.skillstorm.taxdemo.repositories.UserCreditDataRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 public class CreditScoreService {
+
+    private static final Logger logger = Logger.getLogger(CreditScoreService.class.getName());
 
     @Autowired
     private UserCreditDataRepository repository;
@@ -22,8 +28,7 @@ public class CreditScoreService {
     @Autowired
     private CreditScoreHistoryRepository creditScoreHistoryRepository;
 
-
-    public int calculateFICOScore(Long userId) { 
+    public int calculateFICOScore(Long userId) {
         Optional<UserCreditData> optionalCreditData = repository.findByUserId(userId);
         UserCreditData creditData = optionalCreditData
                 .orElseThrow(() -> new RuntimeException("Credit data not found for user with ID: " + userId));
@@ -128,4 +133,54 @@ public class CreditScoreService {
         return Math.max(0, score);
     }
 
+    @Transactional
+    public String generateCreditReport(Long userId) {
+        Optional<UserCreditData> optionalCreditData = repository.findByUserId(userId);
+        if (!optionalCreditData.isPresent()) {
+            throw new RuntimeException("User Credit Data not found for userId: " + userId);
+        }
+
+        UserCreditData creditData = optionalCreditData.get();
+        List<CreditScoreHistory> creditScoreHistory = getCreditScoreHistory(userId);
+
+        logger.info("Credit score history count for userId " + userId + ": " + creditScoreHistory.size());
+
+        StringBuilder report = new StringBuilder();
+        report.append("Credit Report for User ID: ").append(userId).append("\n\n");
+
+        report.append("On-Time Payments: ").append(creditData.getOnTimePayments()).append("\n");
+        report.append("Late Payments: ").append(creditData.getLatePayments()).append("\n");
+        report.append("Missed Payments: ").append(creditData.getMissedPayments()).append("\n");
+        report.append("Public Records: ").append(creditData.getPublicRecords()).append("\n");
+        report.append("Credit Utilization: ").append(creditData.getCreditUtilization()).append("%\n");
+        report.append("Total Debt: $").append(creditData.getTotalDebt()).append("\n");
+        report.append("Oldest Account Age: ").append(creditData.getOldestAccountAge()).append(" months\n");
+        report.append("Recent Inquiries: ").append(creditData.getRecentInquiries()).append("\n");
+        report.append("New Accounts: ").append(creditData.getNewAccounts()).append("\n\n");
+
+        report.append("Credit Accounts:\n");
+        for (CreditAccount account : creditData.getCreditAccounts()) {
+            report.append("  - Account Type: ").append(account.getAccountType()).append("\n");
+            report.append("    Balance: $").append(account.getBalance()).append("\n");
+            report.append("    Credit Limit: $").append(account.getCreditLimit()).append("\n");
+        }
+
+        report.append("\nCredit Score History:\n");
+        for (CreditScoreHistory history : creditScoreHistory) {
+            report.append("  - Score: ").append(history.getScore()).append(", Date: ").append(history.getTimestamp()).append("\n");
+        }
+
+        // Fetch and add latest credit score to the report
+        Optional<CreditScoreHistory> latestScore = creditScoreHistoryRepository.findTopByUserIdOrderByTimestampDesc(userId);
+        if (latestScore.isPresent()) {
+            CreditScoreHistory latest = latestScore.get();
+            logger.info("Latest credit score for userId " + userId + ": " + latest.getScore());
+            report.append("\nLatest Credit Score:\n");
+            report.append("  - Score: ").append(latest.getScore()).append(", Date: ").append(latest.getTimestamp()).append("\n");
+        } else {
+            report.append("\nNo Credit Score History Available.\n");
+        }
+
+        return report.toString();
+    }
 }

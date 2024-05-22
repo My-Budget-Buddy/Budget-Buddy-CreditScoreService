@@ -1,4 +1,4 @@
-//file: CreditScoreController.java
+// file: CreditScoreController.java
 
 package com.skillstorm.taxdemo.controllers;
 
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/credit")
 public class CreditScoreController {
-    
+
     @Autowired
     private CreditScoreService creditScoreService;
 
@@ -27,7 +27,7 @@ public class CreditScoreController {
 
     @GetMapping("/score/{userId}")
     public ResponseEntity<Integer> getCreditScore(@PathVariable Long userId) {
-        int score = creditScoreService.calculateFICOScore(userId); 
+        int score = creditScoreService.calculateFICOScore(userId);
         return ResponseEntity.ok(score);
     }
 
@@ -49,7 +49,7 @@ public class CreditScoreController {
         if (!optionalExistingData.isPresent()) {
             throw new RuntimeException("User Credit Data not found for userId: " + userId);
         }
-        
+
         UserCreditData existingData = optionalExistingData.get();
 
         // Update fields individually
@@ -73,5 +73,11 @@ public class CreditScoreController {
     private void updateCreditAccounts(List<CreditAccount> existingAccounts, List<CreditAccount> updatedAccounts) {
         existingAccounts.clear();
         existingAccounts.addAll(updatedAccounts);
+    }
+
+    @GetMapping("/report/{userId}")
+    public ResponseEntity<String> getCreditReport(@PathVariable Long userId) {
+        String report = creditScoreService.generateCreditReport(userId);
+        return ResponseEntity.ok(report);
     }
 }
