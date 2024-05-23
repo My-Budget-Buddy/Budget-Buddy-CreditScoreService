@@ -112,5 +112,58 @@ public class CreditScoreServiceTest {
         assertEquals("Make all your payments on time to avoid negative marks on your credit report.", tips.get(0));
     }
 
-    
+    @Test
+    public void testCalculateFICOScoreWithHighUtilization() {
+        userCreditData.setCreditUtilization(50);
+
+        when(userCreditDataRepository.findByUserId(1L)).thenReturn(Optional.of(userCreditData));
+        when(creditScoreHistoryRepository.save(any(CreditScoreHistory.class))).thenReturn(creditScoreHistory);
+
+        int score = creditScoreService.calculateFICOScore(1L);
+
+        assertEquals(614, score); // Expected score considering high utilization
+    }
+
+    @Test
+    public void testCalculateFICOScoreWithMultiplePublicRecords() {
+        userCreditData.setPublicRecords(2);
+
+        when(userCreditDataRepository.findByUserId(1L)).thenReturn(Optional.of(userCreditData));
+        when(creditScoreHistoryRepository.save(any(CreditScoreHistory.class))).thenReturn(creditScoreHistory);
+
+        int score = creditScoreService.calculateFICOScore(1L);
+
+        assertEquals(545, score); // Expected score considering multiple public records
+    }
+
+    @Test
+    public void testGenerateCreditReportForUserWithNoCreditHistory() {
+        userCreditData.setCreditAccounts(new ArrayList<>());
+        when(userCreditDataRepository.findByUserId(1L)).thenReturn(Optional.of(userCreditData));
+        when(creditScoreHistoryRepository.findByUserIdOrderByTimestampDesc(1L)).thenReturn(new ArrayList<>());
+        when(creditScoreHistoryRepository.findTopByUserIdOrderByTimestampDesc(1L)).thenReturn(Optional.empty());
+
+        String report = creditScoreService.generateCreditReport(1L);
+
+        assertEquals(true, report.contains("Credit Report for User ID: 1"));
+        assertEquals(true, report.contains("No Credit Score History Available."));
+    }
+
+    @Test
+    public void testGetCreditImprovementTipsWithPositiveCreditData() {
+        userCreditData.setLatePayments(0);
+        userCreditData.setMissedPayments(0);
+        userCreditData.setPublicRecords(0);
+        userCreditData.setCreditUtilization(20);
+        userCreditData.setTotalDebt(10000);
+        userCreditData.setRecentInquiries(1);
+        userCreditData.setNewAccounts(1);
+
+        when(userCreditDataRepository.findByUserId(1L)).thenReturn(Optional.of(userCreditData));
+
+        List<String> tips = creditScoreService.getCreditImprovementTips(1L);
+
+        assertEquals(1, tips.size());
+        assertEquals("Your credit profile looks good! Keep up the good work.", tips.get(0));
+    }
 }
