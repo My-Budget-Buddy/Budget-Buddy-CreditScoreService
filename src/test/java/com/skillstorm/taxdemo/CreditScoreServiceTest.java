@@ -78,5 +78,39 @@ public class CreditScoreServiceTest {
         verify(creditScoreHistoryRepository, times(1)).save(any(CreditScoreHistory.class));
     }
 
+    @Test
+    public void testGetCreditScoreHistory() {
+        List<CreditScoreHistory> historyList = Collections.singletonList(creditScoreHistory);
+        when(creditScoreHistoryRepository.findByUserIdOrderByTimestampDesc(1L)).thenReturn(historyList);
+
+        List<CreditScoreHistory> result = creditScoreService.getCreditScoreHistory(1L);
+
+        assertEquals(1, result.size());
+        assertEquals(750, result.get(0).getScore());
+    }
+
+    @Test
+    public void testGenerateCreditReport() {
+        when(userCreditDataRepository.findByUserId(1L)).thenReturn(Optional.of(userCreditData));
+        when(creditScoreHistoryRepository.findByUserIdOrderByTimestampDesc(1L)).thenReturn(Arrays.asList(creditScoreHistory));
+        when(creditScoreHistoryRepository.findTopByUserIdOrderByTimestampDesc(1L)).thenReturn(Optional.of(creditScoreHistory));
+
+        String report = creditScoreService.generateCreditReport(1L);
+
+        assertEquals(true, report.contains("Credit Report for User ID: 1"));
+        assertEquals(true, report.contains("750"));
+    }
+
+    @Test
+    public void testGetCreditImprovementTips() {
+        when(userCreditDataRepository.findByUserId(1L)).thenReturn(Optional.of(userCreditData));
+
+        List<String> tips = creditScoreService.getCreditImprovementTips(1L);
+
+        // Adjust the expected tips based on the actual data
+        assertEquals(1, tips.size());
+        assertEquals("Make all your payments on time to avoid negative marks on your credit report.", tips.get(0));
+    }
+
     
 }
