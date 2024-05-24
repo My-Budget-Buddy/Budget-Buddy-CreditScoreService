@@ -37,22 +37,19 @@ public class CreditScoreService {
         int score = 0;
 
         // Payment History (35%)
-        score += calculatePaymentHistoryScore(creditData.getOnTimePayments(), 
-                                              creditData.getLatePayments(), 
-                                              creditData.getMissedPayments(),
-                                              creditData.getPublicRecords());
+        score += calculatePaymentHistoryScore();
 
-        // Amounts Owed (30%)
-        score += calculateAmountsOwedScore(creditData.getCreditUtilization(), creditData.getTotalDebt());
+        /*// Amounts Owed (30%)
+        score += calculateAmountsOwedScore(creditData.getCreditUtilization(), creditData.getTotalDebt());*/
 
         // Length of Credit History (15%)
-        score += calculateCreditHistoryLengthScore(creditData.getOldestAccountAge());
+        score += calculateCreditHistoryLengthScore();
 
         // Credit Mix (10%)
         score += calculateCreditMixScore(creditData.getCreditAccounts());
 
         // New Credit (10%)
-        score += calculateNewCreditScore(creditData.getRecentInquiries(), creditData.getNewAccounts());
+        score += calculateNewCreditScore();
 
         // Ensure the score falls within the FICO range
         score = Math.min(850, Math.max(300, score));
@@ -71,9 +68,15 @@ public class CreditScoreService {
         return creditScoreHistoryRepository.findByUserIdOrderByTimestampDesc(userId);
     }
 
-    private int calculatePaymentHistoryScore(int onTimePayments, int latePayments, int missedPayments, int publicRecords) {
+    private int calculatePaymentHistoryScore() {
+        //HARD-CODED ELEMENTS
+        int onTimePayments = 100;
+        int latePayments = 0;
+        int missedPayments = 0;
+        int publicRecords = 0;
+        
         int totalPayments = onTimePayments + latePayments + missedPayments;
-        if (totalPayments == 0) return 0;
+        //if (totalPayments == 0) return 0;
 
         double onTimePercentage = (double) onTimePayments / totalPayments;
         int score = (int) (350 * onTimePercentage); // Base score based on percentage
@@ -86,7 +89,7 @@ public class CreditScoreService {
         return Math.max(0, score); // Ensure score doesn't go below 0
     }
 
-    private int calculateAmountsOwedScore(double creditUtilization, double totalDebt) {
+    /*private int calculateAmountsOwedScore(double creditUtilization, double totalDebt) {
         int score = 300;
 
         // Penalize for high credit utilization
@@ -100,9 +103,11 @@ public class CreditScoreService {
         }
 
         return Math.max(0, score);
-    }
+    }*/
 
-    private int calculateCreditHistoryLengthScore(int oldestAccountAge) {
+    private int calculateCreditHistoryLengthScore() {
+        //8 years average
+        int oldestAccountAge = 96;
         return Math.min(150, oldestAccountAge); // Max 150 points for accounts over 12.5 years old
     }
 
@@ -122,8 +127,12 @@ public class CreditScoreService {
         return (hasCreditCards && hasLoans) ? 100 : 50; // 100 points for having both, 50 for one type
     }
 
-    private int calculateNewCreditScore(int recentInquiries, int newAccounts) {
+    private int calculateNewCreditScore() {
         int score = 100;
+
+        //HARD-CODED ELEMENTS
+        int recentInquiries = 1;
+        int newAccounts = 2;
 
         // Penalize for recent inquiries
         score -= 5 * recentInquiries;
