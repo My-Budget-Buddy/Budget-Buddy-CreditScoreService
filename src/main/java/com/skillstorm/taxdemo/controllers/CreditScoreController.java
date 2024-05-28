@@ -25,8 +25,8 @@ public class CreditScoreController {
     @Autowired
     private UserCreditDataRepository userCreditDataRepository;
 
-    @GetMapping("/score/{userId}")
-    public ResponseEntity<Integer> getCreditScore(@PathVariable Long userId) {
+    @GetMapping("/score")
+    public ResponseEntity<Integer> getCreditScore(@RequestHeader("User-ID") Long userId) {
         int score = creditScoreService.calculateFICOScore(userId);
         return ResponseEntity.ok(score);
     }
@@ -37,14 +37,14 @@ public class CreditScoreController {
         return ResponseEntity.ok(savedData);
     }
 
-    @GetMapping("/history/{userId}")
-    public ResponseEntity<List<CreditScoreHistory>> getCreditScoreHistory(@PathVariable Long userId) {
+    @GetMapping("/history")
+    public ResponseEntity<List<CreditScoreHistory>> getCreditScoreHistory(@RequestHeader("User-ID") Long userId) {
         List<CreditScoreHistory> history = creditScoreService.getCreditScoreHistory(userId);
         return ResponseEntity.ok(history);
     }
 
-    @PutMapping("/data/{userId}")
-    public ResponseEntity<UserCreditData> updateUserCreditData(@PathVariable Long userId, @RequestBody UserCreditData updatedCreditData) {
+    @PutMapping("/data")
+    public ResponseEntity<UserCreditData> updateUserCreditData(@RequestHeader("User-ID") Long userId, @RequestBody UserCreditData updatedCreditData) {
         Optional<UserCreditData> optionalExistingData = userCreditDataRepository.findByUserId(userId);
         if (!optionalExistingData.isPresent()) {
             throw new RuntimeException("User Credit Data not found for userId: " + userId);
