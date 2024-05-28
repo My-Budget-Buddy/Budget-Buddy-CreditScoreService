@@ -29,9 +29,10 @@ Credit Improvement Tips: Provide personalized suggestions for improving credit s
 Clone the Repository: git clone <repository_url>
 Configure Database: Set up a PostgreSQL database and update connection details in application.properties.
 Build and Run: Use Maven or your preferred build tool to compile and run the application.
-Usage
 
-## The microservice exposes the following RESTful API endpoints:
+## Usage
+
+The microservice exposes the following RESTful API endpoints:
 
 GET /api/credit/score: Calculate and retrieve the FICO credit score for a user. Requires a User-ID header.
 POST /api/credit/data: Save new credit data for a user.
