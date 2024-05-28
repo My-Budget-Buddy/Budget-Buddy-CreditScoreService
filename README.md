@@ -24,7 +24,7 @@ Retrieve Credit History: Access historical records of calculated credit scores f
 Generate Credit Reports: Create comprehensive credit reports summarizing user credit data and history.
 Credit Improvement Tips: Provide personalized suggestions for improving credit scores based on individual credit profiles.
 
-##Getting Started
+## Getting Started
 
 Clone the Repository: git clone <repository_url>
 Configure Database: Set up a PostgreSQL database and update connection details in application.properties.
