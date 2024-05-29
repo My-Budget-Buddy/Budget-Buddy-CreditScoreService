@@ -1,0 +1,32 @@
+server:
+    port: 8085
+
+spring:
+    application:
+        name: tax-demo
+    datasource:
+        #postgres local database
+        url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/Tax}
+        username: ${DATABASE_USER:postgres}
+        password: ${DATABASE_PASS:postgres}
+    jpa:
+        hibernate:
+            ddl-auto: update
+
+    output:
+        ansi:
+            enabled: ALWAYS
+
+logging:
+    level:
+        com:
+            skillstorm: debug
+
+
+eureka:
+    client:
+        service-url:
+            defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
+    instance:
+        leaseRenewalIntervalInSeconds: 30
+
