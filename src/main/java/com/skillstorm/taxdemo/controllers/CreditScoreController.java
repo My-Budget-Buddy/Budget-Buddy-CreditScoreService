@@ -75,15 +75,16 @@ public class CreditScoreController {
         existingAccounts.addAll(updatedAccounts);
     }
 
-    @GetMapping("/report/{userId}")
-    public ResponseEntity<String> getCreditReport(@PathVariable Long userId) {
+    // Modified endpoint for credit reports
+    @GetMapping("/report")
+    public ResponseEntity<String> getCreditReport(@RequestHeader("User-ID") Long userId) {
         String report = creditScoreService.generateCreditReport(userId);
         return ResponseEntity.ok(report);
     }
 
-    // New endpoint for credit improvement tips
-    @GetMapping("/tips/{userId}")
-    public ResponseEntity<List<String>> getCreditImprovementTips(@PathVariable Long userId) {
+    // Modified endpoint for credit improvement tips
+    @GetMapping("/tips")
+    public ResponseEntity<List<String>> getCreditImprovementTips(@RequestHeader("User-ID") Long userId) {
         List<String> tips = creditScoreService.getCreditImprovementTips(userId);
         return ResponseEntity.ok(tips);
     }
