@@ -11,6 +11,7 @@ public class UserCreditDataTest {
 
     UserCreditData userCreditData;
 
+    // Test the constructor with 12 arguments not covered by MeanBean
     @Test
     void testUserCreditData() {
 

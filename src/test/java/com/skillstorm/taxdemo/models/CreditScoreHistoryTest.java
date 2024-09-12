@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 public class CreditScoreHistoryTest {
 
+    // Test the constructor with 4 arguments not covered by MeanBean
     @Test
     void testCreditScoreHistory() {
 

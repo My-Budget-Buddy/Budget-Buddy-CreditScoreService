@@ -5,6 +5,11 @@ import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 import org.meanbean.test.BeanVerifier;
 
+/*                                                                      *
+ * This class uses the MeanBean library that simplifies testing POJO's  *
+ * getters, setters, constructors, equal, and hashcode method.          *
+ *                                                                      */
+
 public class ModelAllTest {
 
     @Test

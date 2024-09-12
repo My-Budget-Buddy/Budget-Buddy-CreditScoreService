@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.skillstorm.taxdemo.controllers.CreditScoreControllerTest
 -------------------------------------------------------------------------------
-Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.121 s -- in com.skillstorm.taxdemo.controllers.CreditScoreControllerTest
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.483 s -- in com.skillstorm.taxdemo.controllers.CreditScoreControllerTest

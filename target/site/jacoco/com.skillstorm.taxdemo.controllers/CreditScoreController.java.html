@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(&quot;/api/credit&quot;)
-<span class="nc" id="L20">public class CreditScoreController {</span>
+<span class="fc" id="L20">public class CreditScoreController {</span>
 
     @Autowired
     private CreditScoreService creditScoreService;
@@ -27,66 +27,67 @@ import org.springframework.web.bind.annotation.*;
 
     @GetMapping(&quot;/score&quot;)
     public ResponseEntity&lt;Integer&gt; getCreditScore(@RequestHeader(&quot;User-ID&quot;) Long userId) {
-<span class="nc" id="L30">        int score = creditScoreService.calculateFICOScore(userId);</span>
-<span class="nc" id="L31">        return ResponseEntity.ok(score);</span>
+<span class="fc" id="L30">        int score = creditScoreService.calculateFICOScore(userId);</span>
+<span class="fc" id="L31">        return ResponseEntity.ok(score);</span>
     }
 
     @PostMapping(&quot;/data&quot;)
     public ResponseEntity&lt;UserCreditData&gt; saveCreditData(@RequestBody UserCreditData creditData) {
-<span class="nc" id="L36">        UserCreditData savedData = userCreditDataRepository.save(creditData);</span>
-<span class="nc" id="L37">        return ResponseEntity.ok(savedData);</span>
+<span class="fc" id="L36">        UserCreditData savedData = userCreditDataRepository.save(creditData);</span>
+<span class="fc" id="L37">        return ResponseEntity.ok(savedData);</span>
     }
 
     @GetMapping(&quot;/history&quot;)
     public ResponseEntity&lt;List&lt;CreditScoreHistory&gt;&gt; getCreditScoreHistory(@RequestHeader(&quot;User-ID&quot;) Long userId) {
-<span class="nc" id="L42">        List&lt;CreditScoreHistory&gt; history = creditScoreService.getCreditScoreHistory(userId);</span>
-<span class="nc" id="L43">        return ResponseEntity.ok(history);</span>
+<span class="fc" id="L42">        List&lt;CreditScoreHistory&gt; history = creditScoreService.getCreditScoreHistory(userId);</span>
+<span class="fc" id="L43">        return ResponseEntity.ok(history);</span>
     }
 
     @PutMapping(&quot;/data&quot;)
-    public ResponseEntity&lt;UserCreditData&gt; updateUserCreditData(@RequestHeader(&quot;User-ID&quot;) Long userId, @RequestBody UserCreditData updatedCreditData) {
-<span class="nc" id="L48">        Optional&lt;UserCreditData&gt; optionalExistingData = userCreditDataRepository.findByUserId(userId);</span>
-<span class="nc bnc" id="L49" title="All 2 branches missed.">        if (!optionalExistingData.isPresent()) {</span>
-<span class="nc" id="L50">            throw new RuntimeException(&quot;User Credit Data not found for userId: &quot; + userId);</span>
+    public ResponseEntity&lt;UserCreditData&gt; updateUserCreditData(@RequestHeader(&quot;User-ID&quot;) Long userId,
+            @RequestBody UserCreditData updatedCreditData) {
+<span class="fc" id="L49">        Optional&lt;UserCreditData&gt; optionalExistingData = userCreditDataRepository.findByUserId(userId);</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (!optionalExistingData.isPresent()) {</span>
+<span class="fc" id="L51">            throw new RuntimeException(&quot;User Credit Data not found for userId: &quot; + userId);</span>
         }
 
-<span class="nc" id="L53">        UserCreditData existingData = optionalExistingData.get();</span>
+<span class="fc" id="L54">        UserCreditData existingData = optionalExistingData.get();</span>
 
         // Update fields individually
-<span class="nc" id="L56">        existingData.setOnTimePayments(updatedCreditData.getOnTimePayments());</span>
-<span class="nc" id="L57">        existingData.setLatePayments(updatedCreditData.getLatePayments());</span>
-<span class="nc" id="L58">        existingData.setMissedPayments(updatedCreditData.getMissedPayments());</span>
-<span class="nc" id="L59">        existingData.setPublicRecords(updatedCreditData.getPublicRecords());</span>
-<span class="nc" id="L60">        existingData.setCreditUtilization(updatedCreditData.getCreditUtilization());</span>
-<span class="nc" id="L61">        existingData.setTotalDebt(updatedCreditData.getTotalDebt());</span>
-<span class="nc" id="L62">        existingData.setOldestAccountAge(updatedCreditData.getOldestAccountAge());</span>
-<span class="nc" id="L63">        existingData.setRecentInquiries(updatedCreditData.getRecentInquiries());</span>
-<span class="nc" id="L64">        existingData.setNewAccounts(updatedCreditData.getNewAccounts());</span>
+<span class="fc" id="L57">        existingData.setOnTimePayments(updatedCreditData.getOnTimePayments());</span>
+<span class="fc" id="L58">        existingData.setLatePayments(updatedCreditData.getLatePayments());</span>
+<span class="fc" id="L59">        existingData.setMissedPayments(updatedCreditData.getMissedPayments());</span>
+<span class="fc" id="L60">        existingData.setPublicRecords(updatedCreditData.getPublicRecords());</span>
+<span class="fc" id="L61">        existingData.setCreditUtilization(updatedCreditData.getCreditUtilization());</span>
+<span class="fc" id="L62">        existingData.setTotalDebt(updatedCreditData.getTotalDebt());</span>
+<span class="fc" id="L63">        existingData.setOldestAccountAge(updatedCreditData.getOldestAccountAge());</span>
+<span class="fc" id="L64">        existingData.setRecentInquiries(updatedCreditData.getRecentInquiries());</span>
+<span class="fc" id="L65">        existingData.setNewAccounts(updatedCreditData.getNewAccounts());</span>
 
         // Handle credit accounts collection
-<span class="nc" id="L67">        updateCreditAccounts(existingData.getCreditAccounts(), updatedCreditData.getCreditAccounts());</span>
+<span class="fc" id="L68">        updateCreditAccounts(existingData.getCreditAccounts(), updatedCreditData.getCreditAccounts());</span>
 
-<span class="nc" id="L69">        UserCreditData savedData = userCreditDataRepository.save(existingData);</span>
-<span class="nc" id="L70">        return ResponseEntity.ok(savedData);</span>
+<span class="fc" id="L70">        UserCreditData savedData = userCreditDataRepository.save(existingData);</span>
+<span class="fc" id="L71">        return ResponseEntity.ok(savedData);</span>
     }
 
     private void updateCreditAccounts(List&lt;CreditAccount&gt; existingAccounts, List&lt;CreditAccount&gt; updatedAccounts) {
-<span class="nc" id="L74">        existingAccounts.clear();</span>
-<span class="nc" id="L75">        existingAccounts.addAll(updatedAccounts);</span>
-<span class="nc" id="L76">    }</span>
+<span class="fc" id="L75">        existingAccounts.clear();</span>
+<span class="fc" id="L76">        existingAccounts.addAll(updatedAccounts);</span>
+<span class="fc" id="L77">    }</span>
 
     // Modified endpoint for credit reports
     @GetMapping(&quot;/report&quot;)
     public ResponseEntity&lt;String&gt; getCreditReport(@RequestHeader(&quot;User-ID&quot;) Long userId) {
-<span class="nc" id="L81">        String report = creditScoreService.generateCreditReport(userId);</span>
-<span class="nc" id="L82">        return ResponseEntity.ok(report);</span>
+<span class="fc" id="L82">        String report = creditScoreService.generateCreditReport(userId);</span>
+<span class="fc" id="L83">        return ResponseEntity.ok(report);</span>
     }
 
     // Modified endpoint for credit improvement tips
     @GetMapping(&quot;/tips&quot;)
     public ResponseEntity&lt;List&lt;String&gt;&gt; getCreditImprovementTips(@RequestHeader(&quot;User-ID&quot;) Long userId) {
-<span class="nc" id="L88">        List&lt;String&gt; tips = creditScoreService.getCreditImprovementTips(userId);</span>
-<span class="nc" id="L89">        return ResponseEntity.ok(tips);</span>
+<span class="fc" id="L89">        List&lt;String&gt; tips = creditScoreService.getCreditImprovementTips(userId);</span>
+<span class="fc" id="L90">        return ResponseEntity.ok(tips);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
