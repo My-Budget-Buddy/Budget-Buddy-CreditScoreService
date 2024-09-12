@@ -44,7 +44,8 @@ public class CreditScoreController {
     }
 
     @PutMapping("/data")
-    public ResponseEntity<UserCreditData> updateUserCreditData(@RequestHeader("User-ID") Long userId, @RequestBody UserCreditData updatedCreditData) {
+    public ResponseEntity<UserCreditData> updateUserCreditData(@RequestHeader("User-ID") Long userId,
+            @RequestBody UserCreditData updatedCreditData) {
         Optional<UserCreditData> optionalExistingData = userCreditDataRepository.findByUserId(userId);
         if (!optionalExistingData.isPresent()) {
             throw new RuntimeException("User Credit Data not found for userId: " + userId);
