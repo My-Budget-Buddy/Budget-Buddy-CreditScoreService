@@ -1,6 +1,0 @@
-com\skillstorm\taxdemo\models\ModelAllTest.class
-com\skillstorm\taxdemo\TaxDemoApplicationTests.class
-com\skillstorm\taxdemo\CreditScoreServiceTest.class
-com\skillstorm\taxdemo\controllers\CreditScoreControllerTest.class
-com\skillstorm\taxdemo\models\CreditScoreHistoryTest.class
-com\skillstorm\taxdemo\models\UserCreditDataTest.class
