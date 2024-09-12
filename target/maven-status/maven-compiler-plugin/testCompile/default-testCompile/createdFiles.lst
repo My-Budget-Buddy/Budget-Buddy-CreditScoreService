@@ -1,1 +1,4 @@
-com/skillstorm/taxdemo/TaxDemoApplicationTests.class
+com\skillstorm\taxdemo\models\ModelAllTest.class
+com\skillstorm\taxdemo\TaxDemoApplicationTests.class
+com\skillstorm\taxdemo\CreditScoreServiceTest.class
+com\skillstorm\taxdemo\controllers\CreditScoreControllerTest.class

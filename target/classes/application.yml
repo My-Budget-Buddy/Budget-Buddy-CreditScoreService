@@ -8,7 +8,7 @@ spring:
         #postgres local database
         url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/Tax}
         username: ${DATABASE_USER:postgres}
-        password: ${DATABASE_PASS:postgres}
+        password: ${DATABASE_PASS:Dolphins1972!}
     jpa:
         hibernate:
             ddl-auto: update
@@ -29,4 +29,4 @@ eureka:
             defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
     instance:
         leaseRenewalIntervalInSeconds: 30
-
+        hostname: ${AWS_HOSTNAME:localhost}

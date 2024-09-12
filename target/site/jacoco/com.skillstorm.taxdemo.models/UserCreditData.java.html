@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserCreditData.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tax-demo</a> &gt; <a href="index.source.html" class="el_package">com.skillstorm.taxdemo.models</a> &gt; <span class="el_source">UserCreditData.java</span></div><h1>UserCreditData.java</h1><pre class="source lang-java linenums">package com.skillstorm.taxdemo.models;
+
+import jakarta.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = &quot;user_credit_data&quot;)
+public class UserCreditData {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = &quot;user_id&quot;)
+    private Long userId;
+
+    @Column(name = &quot;on_time_payments&quot;)
+    private int onTimePayments;
+
+    @Column(name = &quot;late_payments&quot;)
+    private int latePayments;
+
+    @Column(name = &quot;missed_payments&quot;)
+    private int missedPayments;
+
+    @Column(name = &quot;public_records&quot;)
+    private int publicRecords;
+
+    @Column(name = &quot;credit_utilization&quot;)
+    private double creditUtilization; // As a percentage
+
+    @Column(name = &quot;total_debt&quot;)
+    private double totalDebt;
+
+    @Column(name = &quot;oldest_account_age&quot;)
+    private int oldestAccountAge; // In months
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = &quot;user_credit_data_id&quot;)
+    private List&lt;CreditAccount&gt; creditAccounts;
+
+    @Column(name = &quot;recent_inquiries&quot;)
+    private int recentInquiries;
+
+    @Column(name = &quot;new_accounts&quot;)
+    private int newAccounts;
+
+<span class="fc" id="L48">    public UserCreditData() {</span>
+        // You can leave this empty, or initialize any fields with default values if needed
+<span class="fc" id="L50">    }</span>
+
+<span class="fc" id="L52">    public UserCreditData(Long id, Long userId, int onTimePayments, int latePayments, int missedPayments,</span>
+            int publicRecords, double creditUtilization, double totalDebt, int oldestAccountAge,
+            List&lt;CreditAccount&gt; creditAccounts, int recentInquiries, int newAccounts) {
+<span class="fc" id="L55">        this.id = id;</span>
+<span class="fc" id="L56">        this.userId = userId;</span>
+<span class="fc" id="L57">        this.onTimePayments = onTimePayments;</span>
+<span class="fc" id="L58">        this.latePayments = latePayments;</span>
+<span class="fc" id="L59">        this.missedPayments = missedPayments;</span>
+<span class="fc" id="L60">        this.publicRecords = publicRecords;</span>
+<span class="fc" id="L61">        this.creditUtilization = creditUtilization;</span>
+<span class="fc" id="L62">        this.totalDebt = totalDebt;</span>
+<span class="fc" id="L63">        this.oldestAccountAge = oldestAccountAge;</span>
+<span class="fc" id="L64">        this.creditAccounts = creditAccounts;</span>
+<span class="fc" id="L65">        this.recentInquiries = recentInquiries;</span>
+<span class="fc" id="L66">        this.newAccounts = newAccounts;</span>
+<span class="fc" id="L67">    }</span>
+
+    public Long getId() {
+<span class="fc" id="L70">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="fc" id="L74">        this.id = id;</span>
+<span class="fc" id="L75">    }</span>
+
+    public Long getUserId() {
+<span class="fc" id="L78">        return userId;</span>
+    }
+
+    public void setUserId(Long userId) {
+<span class="fc" id="L82">        this.userId = userId;</span>
+<span class="fc" id="L83">    }</span>
+
+    public int getOnTimePayments() {
+<span class="fc" id="L86">        return onTimePayments;</span>
+    }
+
+    public void setOnTimePayments(int onTimePayments) {
+<span class="fc" id="L90">        this.onTimePayments = onTimePayments;</span>
+<span class="fc" id="L91">    }</span>
+
+    public int getLatePayments() {
+<span class="fc" id="L94">        return latePayments;</span>
+    }
+
+    public void setLatePayments(int latePayments) {
+<span class="fc" id="L98">        this.latePayments = latePayments;</span>
+<span class="fc" id="L99">    }</span>
+
+    public int getMissedPayments() {
+<span class="fc" id="L102">        return missedPayments;</span>
+    }
+
+    public void setMissedPayments(int missedPayments) {
+<span class="fc" id="L106">        this.missedPayments = missedPayments;</span>
+<span class="fc" id="L107">    }</span>
+
+    public int getPublicRecords() {
+<span class="fc" id="L110">        return publicRecords;</span>
+    }
+
+    public void setPublicRecords(int publicRecords) {
+<span class="fc" id="L114">        this.publicRecords = publicRecords;</span>
+<span class="fc" id="L115">    }</span>
+
+    public double getCreditUtilization() {
+<span class="fc" id="L118">        return creditUtilization;</span>
+    }
+
+    public void setCreditUtilization(double creditUtilization) {
+<span class="fc" id="L122">        this.creditUtilization = creditUtilization;</span>
+<span class="fc" id="L123">    }</span>
+
+    public double getTotalDebt() {
+<span class="fc" id="L126">        return totalDebt;</span>
+    }
+
+    public void setTotalDebt(double totalDebt) {
+<span class="fc" id="L130">        this.totalDebt = totalDebt;</span>
+<span class="fc" id="L131">    }</span>
+
+    public int getOldestAccountAge() {
+<span class="fc" id="L134">        return oldestAccountAge;</span>
+    }
+
+    public void setOldestAccountAge(int oldestAccountAge) {
+<span class="fc" id="L138">        this.oldestAccountAge = oldestAccountAge;</span>
+<span class="fc" id="L139">    }</span>
+
+    public List&lt;CreditAccount&gt; getCreditAccounts() {
+<span class="fc" id="L142">        return creditAccounts;</span>
+    }
+
+    public void setCreditAccounts(List&lt;CreditAccount&gt; creditAccounts) {
+<span class="fc" id="L146">        this.creditAccounts = creditAccounts;</span>
+<span class="fc" id="L147">    }</span>
+
+    public int getRecentInquiries() {
+<span class="fc" id="L150">        return recentInquiries;</span>
+    }
+
+    public void setRecentInquiries(int recentInquiries) {
+<span class="fc" id="L154">        this.recentInquiries = recentInquiries;</span>
+<span class="fc" id="L155">    }</span>
+
+    public int getNewAccounts() {
+<span class="fc" id="L158">        return newAccounts;</span>
+    }
+
+    public void setNewAccounts(int newAccounts) {
+<span class="fc" id="L162">        this.newAccounts = newAccounts;</span>
+<span class="fc" id="L163">    }</span>
+
+    
+
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
