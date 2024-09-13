@@ -68,7 +68,7 @@ public class CreditScoreServiceTest {
         creditScoreHistory.setTimestamp(LocalDateTime.now());
     }
 
-    /* 
+    /*
     @Ignore("Test fails before any changes are made")
     @Test
     public void testCalculateFICOScore() {
@@ -80,7 +80,8 @@ public class CreditScoreServiceTest {
         assertEquals(714, score);
         verify(creditScoreHistoryRepository, times(1)).save(any(CreditScoreHistory.class));
     }
-    */
+    */  
+    
     @Test
     public void testGetCreditScoreHistory() {
         List<CreditScoreHistory> historyList = Collections.singletonList(creditScoreHistory);
