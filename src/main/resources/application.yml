@@ -8,7 +8,7 @@ spring:
         #postgres local database
         url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/Tax}
         username: ${DATABASE_USER:postgres}
-        password: ${DATABASE_PASS:Dolphins1972!}
+        password: ${DATABASE_PASS:postgres}
     jpa:
         hibernate:
             ddl-auto: update

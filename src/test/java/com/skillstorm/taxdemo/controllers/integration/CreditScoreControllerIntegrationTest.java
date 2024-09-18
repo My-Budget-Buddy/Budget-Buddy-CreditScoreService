@@ -1,13 +1,10 @@
 package com.skillstorm.taxdemo.controllers.integration;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,8 +18,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import javax.print.attribute.standard.Media;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.hamcrest.Matchers.hasSize;
@@ -56,7 +51,7 @@ public class CreditScoreControllerIntegrationTest {
 
     /*
      * Expect the status below with the header User-ID provided and a valid user id
-     * "status": 200
+     * returns "status": 200
      */
     @Test
     public void testGetHistory() throws Exception {      
@@ -82,7 +77,7 @@ public class CreditScoreControllerIntegrationTest {
     }
 
     /*
-     * If a User-ID is provided, even if invalid will return a 200 status.
+     * If a Header User-ID is provided will return a 200 status.
      */
     @Test
     public void testGetHistoryWithNoValues() throws Exception {      
@@ -100,9 +95,8 @@ public class CreditScoreControllerIntegrationTest {
     }
 
     /*
-     * Expect the status and error below if the header User-id is not provided
-     * "status": 400,
-     * "error": "Bad Request"
+     * If the header User-id is not provided you can expect the status and error below
+     * "status": 400, "error": "Bad Request"
      */
     @Test
     public void testGetHistoryWithNoHeaderValue() throws Exception {   
@@ -117,15 +111,8 @@ public class CreditScoreControllerIntegrationTest {
     }
 
     /*
-     * This method actually has a bug in the code. It is a GET request but through service call it actually creates a POST
-     * request using creditScoreHistoryRepository.save(anyData) in the CreditScoreService calculateFICOScore(Long userId) method.
+     * If a Header User-ID and valid userID is provided will return a 200 status.
      */
-    @Test
-    public void testGetCreditScore() throws Exception {
-        // todo - currently a bug makes a post-request/save to the CreditScoreHistoryRepository,
-        // todo - should be fixed before testing otherwise test will create a new record in the database
-    }
-
     @Test
     public void testGetCreditImprovementTips()throws Exception{
 
@@ -160,6 +147,9 @@ public class CreditScoreControllerIntegrationTest {
             .andExpect(status().isBadRequest());
     }
 
+    /*
+     * If a Header User-ID is provided will return a 200 status.
+     */
     @Test
     public void testGetCreditReport() throws Exception {
 
@@ -174,6 +164,26 @@ public class CreditScoreControllerIntegrationTest {
             .andExpect(jsonPath("$", is(report)));
     }
 
+    /*
+     * If no User-ID header is provided, the status will be 400 Bad Request
+     */
+    @Test
+    public void testGetCreditReportNoHeaderValue() throws Exception {
+
+        // Arrange
+        String report = "Credit Report";
+        when(creditScoreService.generateCreditReport(anyLong())).thenReturn(report);
+        // Act and Assert
+        mockMvc.perform(get("/api/credit/report")
+            .contentType("application/json"))
+            .andExpect(status().isBadRequest());
+    }
+
+    /*
+     * If a Header User-ID is provided will return a 200 status.
+     * this should be status.isCreated() instead of isOk() returning 201 status code instead of 200
+     * but the controller class explicitly returns 200 status code isOk()
+     */
     @Test
     public void testPostSaveCreditData() throws Exception {
         
@@ -188,10 +198,9 @@ public class CreditScoreControllerIntegrationTest {
         // Act and Assert
         mockMvc.perform(post("/api/credit/data")
             .content(jsonResponseBody)
-            .contentType(MediaType.APPLICATION_JSON))
-            .andDo(MockMvcResultHandlers.print())                           // Print the result of the request
-            .andExpect(status().isOk())                                     // this should be isCreated() instead of isOk() returning 201 status code instead of 200
-            .andExpect(jsonPath("$.id", is(2)))            // but the controller class explicitly returns 200 status code isOk()
+            .contentType(MediaType.APPLICATION_JSON))                          
+            .andExpect(status().isOk())                                     
+            .andExpect(jsonPath("$.id", is(2)))            
             .andExpect(jsonPath("$.userId", is(2)))
             .andExpect(jsonPath("$.onTimePayments", is(50)))
             .andExpect(jsonPath("$.latePayments", is(0)))
@@ -204,6 +213,9 @@ public class CreditScoreControllerIntegrationTest {
             .andExpect(jsonPath("$.newAccounts", is(0))); 
     }
 
+    /*
+     * Put request requires a header as well as a body to return a 200 status
+     */
     @Test
     public void testPutSaveCreditData() throws Exception {
         
@@ -212,7 +224,7 @@ public class CreditScoreControllerIntegrationTest {
         0,0,25.0, 
         30_000.0, 5, new ArrayList<>(),
          0, 0);
-         
+
         var jsonResponseBody = objectMapper.writeValueAsString(userData);
         when(userCreditDataRepository.findByUserId(anyLong())).thenReturn(Optional.of(userData));
         when(userCreditDataRepository.save(any(UserCreditData.class))).thenReturn(userData);
@@ -234,6 +246,39 @@ public class CreditScoreControllerIntegrationTest {
             .andExpect(jsonPath("$.oldestAccountAge", is(5)))
             .andExpect(jsonPath("$.recentInquiries", is(0)))
             .andExpect(jsonPath("$.newAccounts", is(0))); 
+    }
+
+    /* 
+     * If no header is provided, the status will be 400 Bad Request
+     */
+    @Test
+    public void testPutSaveCreditDataNoHeader() throws Exception {
+        
+        // Arrange
+        UserCreditData userData = new UserCreditData(2L,2L,50,0,
+        0,0,25.0, 
+        30_000.0, 5, new ArrayList<>(),
+         0, 0);
+
+        var jsonResponseBody = objectMapper.writeValueAsString(userData);
+        when(userCreditDataRepository.findByUserId(anyLong())).thenReturn(Optional.of(userData));
+        when(userCreditDataRepository.save(any(UserCreditData.class))).thenReturn(userData);
+        // Act and Assert
+        mockMvc.perform(put("/api/credit/data")
+            .content(jsonResponseBody)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andDo(MockMvcResultHandlers.print())                           
+            .andExpect(status().isBadRequest());                                
+    }
+
+    /*
+     * This method actually has a bug in the code. It is a GET request but through service call it actually creates a POST
+     * request using creditScoreHistoryRepository.save(anyData) in the CreditScoreService calculateFICOScore(Long userId) method.
+     */
+    @Test
+    public void testGetCreditScore() throws Exception {
+        // todo - currently a bug makes a post-request/save to the CreditScoreHistoryRepository,
+        // todo - should be fixed before testing otherwise test will create a new record in the database
     }
 
 }
