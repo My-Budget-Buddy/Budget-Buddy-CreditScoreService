@@ -1,8 +1,0 @@
-com\skillstorm\taxdemo\models\CreditAccount.class
-com\skillstorm\taxdemo\models\CreditScoreHistory.class
-com\skillstorm\taxdemo\services\CreditScoreService.class
-com\skillstorm\taxdemo\TaxDemoApplication.class
-com\skillstorm\taxdemo\controllers\CreditScoreController.class
-com\skillstorm\taxdemo\repositories\CreditScoreHistoryRepository.class
-com\skillstorm\taxdemo\repositories\UserCreditDataRepository.class
-com\skillstorm\taxdemo\models\UserCreditData.class
