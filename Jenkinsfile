@@ -141,7 +141,7 @@ pipeline {
                     string(credentialsId: 'STAGING_DATABASE_PASSWORD', variable: 'DATABASE_PASS')])
                     {
                         sh '''
-                            export DATABASE_URL=jdbc:postgresql://${SERVICE_NAME}-postgres.${NAMESPACE}.svc.cluster.local:5432/my_budget_buddy
+                            export DATABASE_URL=jdbc:postgresql://postgres.${NAMESPACE}.svc.cluster.local:5432/my_budget_buddy
                             mvn clean verify -Pcoverage -Dspring.profiles.active=test \
                                 -Dspring.datasource.url=$DATABASE_URL \
                                 -Dspring.datasource.username=$DATABASE_USER \
@@ -175,7 +175,7 @@ pipeline {
                     string(credentialsId: 'STAGING_DATABASE_PASSWORD', variable: 'DATABASE_PASS')])
                     {
                         sh '''
-                            export DATABASE_URL=jdbc:postgresql://${SERVICE_NAME}-postgres.${NAMESPACE}.svc.cluster.local:5432/my_budget_buddy
+                            export DATABASE_URL=jdbc:postgresql://postgres.${NAMESPACE}.svc.cluster.local:5432/my_budget_buddy
                             mvn clean verify -Pcoverage -Dspring.profiles.active=test \
                                 -Dspring.datasource.url=$DATABASE_URL \
                                 -Dspring.datasource.username=$DATABASE_USER \
@@ -254,7 +254,7 @@ pipeline {
             sed -i "s/<image-version>/test-latest/" deployment-${SERVICE_NAME}.yaml
             # set test DB url
             # note use of | as delimiter because of forward slashes in the url
-            sed -i 's|<db-url>|jdbc:****ql://${SERVICE_NAME}-postgres.${NAMESPACE}.svc.cluster.local:5432/my_budget_buddy/|' deployment-${SERVICE_NAME}.yaml
+            sed -i 's|<db-url>|jdbc:****ql://postgres.${NAMESPACE}.svc.cluster.local:5432/my_budget_buddy/|' deployment-${SERVICE_NAME}.yaml
 
             # reapply
 
