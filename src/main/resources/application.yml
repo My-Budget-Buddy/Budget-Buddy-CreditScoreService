@@ -6,9 +6,9 @@ spring:
         name: tax-demo
     datasource:
         #postgres local database
-        url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/Tax}
+        url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/my_budget_buddy}
         username: ${DATABASE_USER:postgres}
-        password: ${DATABASE_PASS:postgres}
+        password: ${DATABASE_PASS:}
     jpa:
         hibernate:
             ddl-auto: update
