@@ -101,7 +101,7 @@ pipeline {
           steps{
             sh '''
             git clone https://github.com/My-Budget-Buddy/Budget-Buddy-Kubernetes.git
-            git clone -b daniel413x/pipeline https://github.com/My-Budget-Buddy/Budget-Buddy-Frontend-Testing.git
+            git clone -b testing-cohort-dev https://github.com/My-Budget-Buddy/Budget-Buddy-Frontend-Testing.git
             '''
           }
       }
