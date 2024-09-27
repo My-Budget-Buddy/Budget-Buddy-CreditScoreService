@@ -69,7 +69,7 @@ pipeline {
     }
 
     options {
-        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
+        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '30'))
     }
 
     environment {
@@ -405,8 +405,8 @@ pipeline {
           sh '''
               TRIES_REMAINING=16
 
-              echo 'Waiting for frontend to be ready...'
-              while ! curl --output /dev/null --silent https://api.skillstorm-congo.com/${SERVICE_ROUTE}; do
+              echo 'Waiting for service to be ready...'
+              while ! curl --output /dev/null --silent https://staging.api.skillstorm-congo.com/${SERVICE_ROUTE}; do
                   TRIES_REMAINING=$((TRIES_REMAINING - 1))
                   if [ $TRIES_REMAINING -le 0 ]; then
                       echo "***Service is ready***"
